@@ -9,10 +9,18 @@ import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.view.Gravity
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -24,6 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -38,16 +47,18 @@ import kotlinx.android.synthetic.main.activity_map.*
 import java.io.IOException
 import java.util.*
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, PermissionListener {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, PermissionListener, NavigationView.OnNavigationItemSelectedListener {
 
     override fun onMapClick(p0: LatLng?) {
 
     }
 
-
     private var googleMap: GoogleMap? = null
     private lateinit var firebaseServer: FirebaseServer
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    lateinit var toolbar: Toolbar
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var navView: NavigationView
 
     companion object {
         const val REQUEST_CHECK_SETTINGS = 43
@@ -56,20 +67,26 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
-        setSupportActionBar(toolbar)
 
-        val mapFragment: SupportMapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment!!.getMapAsync(this)
+
         fusedLocationProviderClient = FusedLocationProviderClient(this)
-
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
 
         firebaseServer = FirebaseServer(this) // inicializacia firebase databaze
 
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navView = findViewById(R.id.nav_view)
+
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar, 0, 0
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        navView.setNavigationItemSelectedListener(this)
     }
 
     override fun onMapReady(p0: GoogleMap?) {
@@ -90,9 +107,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         } else {
             givePermission()
         }
-
-
-
     }
 
     private fun isPermissionGiven(): Boolean{
@@ -208,5 +222,46 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     }
 
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_map -> {
+                Toast.makeText(this, "Mapa", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MapActivity::class.java)
+                // To pass any data to next activity
+                // start your next activity
+                startActivity(intent)
+            }
+            R.id.nav_place -> {
+                Toast.makeText(this, "Miesta", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, PlacesActivity::class.java)
+                // To pass any data to next activity
+                // start your next activity
+                startActivity(intent)
+            }
+            R.id.nav_contact -> {
+                Toast.makeText(this, "Priatelia", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, FriendsActivity::class.java)
+                // To pass any data to next activity
+                // start your next activity
+                startActivity(intent)
+            }
+            R.id.nav_qr -> {
+                Toast.makeText(this, "QR kód", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, QrCodeActivity::class.java)
+                // To pass any data to next activity
+                // start your next activity
+                startActivity(intent)
+            }
+            R.id.nav_logout -> {
+                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+                val intent5 = Intent(this, MainActivity::class.java)
+                // To pass any data to next activity
+                // start your next activity
+                startActivity(intent5)
+            }
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
 }
 

@@ -6,10 +6,13 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.location.FusedLocationProviderClient
 
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var firebaseServer: FirebaseServer
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { view ->
             startActivity(Intent(this@MainActivity,MapActivity::class.java))
         }
+
+        firebaseServer = FirebaseServer(this) // inicializacia firebase databaze
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -36,5 +41,6 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }
 
