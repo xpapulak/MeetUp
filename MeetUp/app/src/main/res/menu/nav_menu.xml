@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_map"
+            android:title="Mapa"/>
+        <item
+            android:id="@+id/nav_place"
+            android:icon="@drawable/ic_place_"
+            android:title="Miesta"/>
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_perm_contact"
+            android:title="Priatelia"/>
+        <item
+            android:id="@+id/nav_qr"
+            android:icon="@drawable/ic_code"
+            android:title="QR kód"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_signouz"
+            android:title="Sign Out"/>
+    </group>
+
+</menu>
