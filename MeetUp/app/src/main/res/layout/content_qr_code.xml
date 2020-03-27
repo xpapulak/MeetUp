@@ -37,11 +37,41 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
+
+        <ImageView
+            android:id="@+id/qrcode"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20sp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/editQRText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="Napíšte priateľovi správu" />
+
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Konecne qr kod"
-            android:textSize="60dp"/>
+            android:backgroundTint="@color/colorAccent"
+            android:textColor="@android:color/white"
+            android:text="Vytvor QR kód"
+            android:layout_gravity="center"
+            android:layout_marginTop="20sp"
+            android:id="@+id/createQR"/>
+
+        <Button
+            android:id="@+id/shareQR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20sp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Zdieľaj QR kód"
+            android:textColor="@android:color/white"
+            android:visibility="invisible" />
     </LinearLayout>
 
 </LinearLayout>

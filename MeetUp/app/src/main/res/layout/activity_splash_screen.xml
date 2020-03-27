@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".SplashScreenActivity">
 
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/splash"
-        android:text="Toto je splash screen"
-        android:textSize="50dp">
-    </TextView>
+        android:src="@drawable/splash"
+        android:scaleType="centerCrop">
+</ImageView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
