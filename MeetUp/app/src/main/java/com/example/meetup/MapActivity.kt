@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -245,9 +246,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                 startActivity(intent)
             }
             R.id.nav_logout -> {
-                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+
+                Toast.makeText(this, "Odhlásili ste sa", Toast.LENGTH_SHORT).show()
                 val intent5 = Intent(this, MainActivity::class.java)
                 AuthUI.getInstance().signOut(this)
+                FirebaseAuth.getInstance().signOut()
+                var user = FirebaseAuth.getInstance().currentUser
+                user?.delete()
                 startActivity(intent5)
             }
         }
@@ -255,4 +260,5 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         return true
     }
 }
+
 

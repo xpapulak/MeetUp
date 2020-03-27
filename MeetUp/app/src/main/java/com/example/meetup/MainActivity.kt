@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -17,21 +18,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseServer: FirebaseServer
     lateinit var providers: List<AuthUI.IdpConfig>
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        var user = FirebaseAuth.getInstance().currentUser
 
-        firebaseServer = FirebaseServer(this) // inicializacia firebase databaze
+        if (user != null) {
+            val intent = Intent(this, MapActivity::class.java)
+            startActivity(intent)
+            Toast.makeText(this,"Ste prihlásený/á ako: "+ user.email!!, Toast.LENGTH_SHORT).show()
+        }
+        else{
+            setContentView(R.layout.activity_main)
+            setSupportActionBar(toolbar)
 
-        //Init signin
-        providers = Arrays.asList<AuthUI.IdpConfig>(
-            AuthUI.IdpConfig.EmailBuilder().build(), //Email
-            AuthUI.IdpConfig.GoogleBuilder().build() //Google
-        )
+            firebaseServer = FirebaseServer(this) // inicializacia firebase databaze
 
-        showSignInOptions()
+            //Init signin
+            providers = Arrays.asList<AuthUI.IdpConfig>(
+                AuthUI.IdpConfig.EmailBuilder().build(), //Email
+                AuthUI.IdpConfig.GoogleBuilder().build() //Google
+            )
+
+            showSignInOptions()
+        }
     }
 
     private fun showSignInOptions(){
