@@ -1,17 +1,21 @@
 package com.example.meetup
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.google.android.material.snackbar.Snackbar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.location.FusedLocationProviderClient
-
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    private val MY_REQUEST_CODE: Int = 717
     private lateinit var firebaseServer: FirebaseServer
+    lateinit var providers: List<AuthUI.IdpConfig>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,11 +23,36 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            startActivity(Intent(this@MainActivity,MapActivity::class.java))
-        }
-
         firebaseServer = FirebaseServer(this) // inicializacia firebase databaze
+
+        //Init signin
+        providers = Arrays.asList<AuthUI.IdpConfig>(
+            AuthUI.IdpConfig.EmailBuilder().build(), //Email
+            AuthUI.IdpConfig.GoogleBuilder().build() //Google
+        )
+
+        showSignInOptions()
+    }
+
+    private fun showSignInOptions(){
+        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .setTheme(R.style.SignTheme)
+            .build(),MY_REQUEST_CODE)
+     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == MY_REQUEST_CODE){
+            val response = IdpResponse.fromResultIntent(data)
+            if (resultCode == Activity.RESULT_OK){
+                val intent = Intent(this, MapActivity::class.java)
+                startActivity(intent)
+            }
+            else{
+                Toast.makeText(this,""+response!!.error!!.message, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
