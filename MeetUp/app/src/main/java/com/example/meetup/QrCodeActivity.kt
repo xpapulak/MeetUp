@@ -69,7 +69,7 @@ class QrCodeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 return@setOnClickListener
             }
 
-            bitmap = QRCode.from("Nájdete nás na https://is.mendelu.cz\n$text").withSize(1000, 1000).bitmap()
+            bitmap = QRCode.from("Tu sa bude nachádzať URL na stiahnutie\n$text").withSize(1000, 1000).bitmap()
             (imageQR as ImageView).setImageBitmap(bitmap)
             hideKeyboard()
            var shareQr = findViewById<Button>(R.id.shareQR) as Button
